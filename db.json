@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Get up early",
+        "id": 1,
+        "isComplete": false
+    },
+    {
+        "name": "Brush teeth",
+        "id": 2,
+        "isComplete": false
+    },
+    {
+        "name": "Have a breakfast",
+        "id": 3,
+        "isComplete": false
+    },
+    {
+        "name": "Go to work",
+        "id": 4,
+        "isComplete": false
+    }
+]
