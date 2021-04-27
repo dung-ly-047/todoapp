@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todoapp/controllers/todoController.dart';
+import 'package:todoapp/models/todoModel.dart';
+import 'package:todoapp/widgets/todoItem.dart';
 
 class HomeScreen extends StatelessWidget {
   final todoController = Get.put(TodoController());
@@ -10,7 +14,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          addTodoDialog(context);
+        },
         label: Text("Add new todo"),
         icon: Icon(Icons.add),
       ),
@@ -37,9 +43,9 @@ class HomeScreen extends StatelessWidget {
                       )
                     : ListView.builder(
                         itemCount: todoController.todoList.length,
-                        itemBuilder: (context, index) => CheckboxListTile(
-                          value: todoController.todoList[index].isComplete,
-                          onChanged: (val) {},
+                        itemBuilder: (context, index) => TodoItem(
+                          todoController: todoController,
+                          index: index,
                         ),
                       ),
               ),
@@ -47,6 +53,42 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future addTodoDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (contextDialog) {
+        String newTodoName = '';
+        return AlertDialog(
+          title: Text("Title"),
+          content: TextField(
+            onChanged: (value) => newTodoName = value,
+            decoration: InputDecoration(
+              hintText: "Enter a title for todo",
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text("Cancel")),
+            TextButton(
+                onPressed: () {
+                  todoController.addTodo(TodoModel(
+                      name: newTodoName,
+                      id: Random().nextInt(100),
+                      isComplete: false));
+                  Get.back();
+                },
+                child: Text("OK")),
+          ],
+        );
+      },
     );
   }
 }

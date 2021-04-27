@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final todoModel = todoModelFromJson(jsonString);
-
 import 'dart:convert';
 
 List<TodoModel> todoModelFromJson(String str) =>
@@ -19,7 +15,7 @@ class TodoModel {
 
   String name;
   int id;
-  bool isComplete;
+  bool? isComplete;
 
   factory TodoModel.fromJson(Map<String, dynamic> json) => TodoModel(
         name: json["name"],

@@ -2,8 +2,19 @@ import 'package:get/get.dart';
 import 'package:todoapp/models/todoModel.dart';
 
 class TodoService extends GetConnect {
+  /* 
+  **********************
+        API PATHS
+  ********************** 
+  */
   static const todoPath =
-      'https://my-json-server.typicode.com/dung-ly-047/todoapp';
+      'https://mocki.io/v1/1a5ad88e-e424-45d9-885a-e46b788ff8fe';
+
+  /* 
+  **********************
+        SERVICES
+  ********************** 
+  */
 
   Future<List<TodoModel>> getTodo() async {
     try {
@@ -14,5 +25,13 @@ class TodoService extends GetConnect {
       print(e);
     }
     return [];
+  }
+
+  void addTodo(List<TodoModel> todoList, TodoModel todo) {
+    todoList.add(todo);
+  }
+
+  void deleteTodo(List<TodoModel> todoList, int id) {
+    todoList.removeWhere((element) => element.id == id);
   }
 }
