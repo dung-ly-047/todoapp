@@ -3,36 +3,31 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:todoapp/controllers/todoController.dart';
 import 'package:todoapp/models/todoModel.dart';
 import 'package:todoapp/widgets/todoItem.dart';
 
-class HomeScreen extends StatelessWidget {
+class TodoScreen extends StatelessWidget {
   final todoController = Get.put(TodoController());
+  final bool? isCompleted;
+
+  TodoScreen({Key? key, this.isCompleted}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          addTodoDialog(context);
-        },
-        label: Text("Add new todo"),
-        icon: Icon(Icons.add),
-      ),
+      floatingActionButton: isCompleted == null
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                addTodoDialog(context);
+              },
+              label: Text("Add new todo"),
+              icon: Icon(Icons.add),
+            )
+          : SizedBox(),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: Text(
-                "TodoList",
-                style: GoogleFonts.sourceSansPro(
-                  color: Colors.green,
-                  fontSize: 54,
-                ),
-              ),
-            ),
             Obx(
               () => Expanded(
                 child: todoController.isLoading.value
@@ -43,11 +38,35 @@ class HomeScreen extends StatelessWidget {
                       )
                     : ListView.builder(
                         itemCount: todoController.todoList.length,
-                        itemBuilder: (context, index) => TodoItem(
-                          todoController: todoController,
-                          index: index,
-                        ),
-                      ),
+                        itemBuilder: (context, index) {
+                          if (isCompleted != null && isCompleted == true) {
+                            if (todoController.todoList[index].isComplete ==
+                                true) {
+                              return TodoItem(
+                                todoController: todoController,
+                                index: index,
+                                isCompleted: isCompleted,
+                              );
+                            }
+                          } else if (isCompleted != null &&
+                              isCompleted == false) {
+                            if (todoController.todoList[index].isComplete ==
+                                false) {
+                              return TodoItem(
+                                todoController: todoController,
+                                index: index,
+                                isCompleted: isCompleted,
+                              );
+                            }
+                          } else {
+                            return TodoItem(
+                              todoController: todoController,
+                              index: index,
+                              isCompleted: isCompleted,
+                            );
+                          }
+                          return SizedBox();
+                        }),
               ),
             ),
           ],

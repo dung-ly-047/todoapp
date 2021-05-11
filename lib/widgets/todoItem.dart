@@ -7,10 +7,12 @@ class TodoItem extends StatelessWidget {
     Key? key,
     required this.todoController,
     required this.index,
+    this.isCompleted,
   }) : super(key: key);
 
   final TodoController todoController;
   final int index;
+  final bool? isCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +28,27 @@ class TodoItem extends StatelessWidget {
                         ? TextDecoration.lineThrough
                         : TextDecoration.none),
               ),
+              activeColor: isCompleted != null
+                  ? Colors.grey
+                  : Theme.of(context).primaryColor,
               value: controller.todoList[index].isComplete,
               onChanged: (val) {
-                controller.checkTodo(controller.todoList[index].id, val!);
+                if (isCompleted == null)
+                  controller.checkTodo(controller.todoList[index].id, val!);
               },
             ),
           ),
         ),
-        IconButton(
-            icon: Icon(
-              Icons.delete,
-              color: Colors.red[300],
-            ),
-            onPressed: () {
-              todoController.deleteTodo(todoController.todoList[index].id);
-            })
+        isCompleted == null
+            ? IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red[300],
+                ),
+                onPressed: () {
+                  todoController.deleteTodo(todoController.todoList[index].id);
+                })
+            : SizedBox(),
       ],
     );
   }
